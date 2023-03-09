@@ -10,7 +10,7 @@
       @click="task.done = !task.done"
       clickable
       :class="{'done bg-green-4': task.done}"
-      v-for="task in tasks"
+      v-for="(task, index) in tasks"
       :key="task.title"
       v-ripple
       >
@@ -29,7 +29,9 @@
         v-if="task.done"
         side
         >
-          x
+        <q-btn 
+        @click.stop="deleteTask(index)"
+        outline round color="red" icon="delete" />
         </q-item-section>
       </q-item>
 
@@ -57,6 +59,11 @@ export default{
         },
       ]
       
+    }
+  },
+  methods: {
+    deleteTask(index) {
+      this.tasks.splice(index, 1)
     }
   }
 
