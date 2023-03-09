@@ -3,8 +3,8 @@
     <div class="wrapper-content-todo">
     <h5>Todo</h5>
     <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
-    <q-input standout="bg-orange-5 text-white" class="input-task" v-model="content" label="название задачи" />
-    <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!content"/>
+    <q-input standout="bg-orange-5 text-white" class="input-task" v-model="newTodoContent" label="название задачи" />
+    <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!newTodoContent"/>
     </form>
     
     <q-list 
@@ -12,11 +12,11 @@
     bordered
     >
       <q-item 
-      @click="task.done = !task.done"
+      @click="toggleDone(task.id)"
       clickable
       :class="{'done bg-green-4': task.done}"
-      v-for="(task, index) in tasks"
-      :key="task.title"
+      v-for="task in tasks"
+      :key="task.id"
       v-ripple
       >
         <q-item-section avatar>
@@ -28,14 +28,17 @@
           />
         </q-item-section>
         <q-item-section>
-          <q-item-label>{{ task.title }}</q-item-label>
+          <q-item-label>{{ task.content }}</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ task.date }}</q-item-label>
         </q-item-section>
         <q-item-section
         v-if="task.done"
         side
         >
         <q-btn 
-        @click.stop="deleteTask(index)"
+        @click.stop="deleteTask(task)"
         outline round color="red" icon="delete" />
         </q-item-section>
       </q-item>
@@ -47,40 +50,55 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
+import { db } from '../firebase'
+import { collection, onSnapshot, addDoc, doc, deleteDoc, updateDoc, query, orderBy } from "firebase/firestore";
 
+// fb ref
+const tasksCollectionsRef = collection(db, "todos-quasar")
+const tasksCollectionsQuery = query(tasksCollectionsRef, orderBy("date", "desc"));
 
-const content = ref() 
+// todo
+const tasks = ref([]);
 
-const tasks = ref([
-        {
-        title: "hi",
-        done: false
-        },
-        {
-        title: "h1",
-        done: false
-        },
-        {
-        title: "h2",
-        done: false
-        },
-      ])
+// get todo 
+onMounted( () => {
+onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
+  const fbtasks = [];
+  
+  querySnapshot.forEach((doc) => {
+    let date = new Date(doc.data().date)
+      const task = {
+    id: doc.id,
+    content: doc.data().content,
+    date: date.toDateString(),
+    done: doc.data().done
+    };
+    fbtasks.push(task)
+    });
+    tasks.value = fbtasks
+    });
+  })
 
-    const addTusk = () => {
-      console.log(tasks.value)
-          tasks.value.push({
-        title: content.value,
-        done: false
-      })
-      content.value=""
-    }
+  // add todo 
+  const newTodoContent = ref("") 
+
+  const addTusk = () => {
+    addDoc(tasksCollectionsRef, {
+    content: newTodoContent.value,
+    done: false,
+    date: Date.now()
+  });
+    newTodoContent.value = "";
+  }
   
     const $q = useQuasar()
 
-function deleteTask (index) {
+// delete todo
+
+function deleteTask (task) {
   $q.dialog({
-    title: 'Confirm',
+    content: 'Confirm',
     message: 'Вы действительно хотите удалить?',
     ok: {
       push: true
@@ -91,14 +109,22 @@ function deleteTask (index) {
     },
     persistent: true
   }).onOk(() => {
-    tasks.value.splice(index, 1);
+    deleteDoc(doc(tasksCollectionsRef, task.id));
     $q.notify({
-          message: 'Задача удалена',
+          message: `Задача с заголовком \"${task.content}\" удалена`,
           color: 'orange'
         })
   })
 }
 
+// toggle todo 
+const toggleDone = (id) => {
+  const index = tasks.value.findIndex(task => task.id === id);
+
+  updateDoc(doc(tasksCollectionsRef, id), {
+  done: !tasks.value[index].done
+});
+}
 </script>
 
 <style lang="scss">
