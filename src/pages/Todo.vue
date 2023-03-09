@@ -1,7 +1,11 @@
 <template>
   <q-page class="bg-orange-3 column q-pa-lg">
     <h5>Todo</h5>
-
+    <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
+    <q-input standout="bg-orange-5 text-white" class="input-task" v-model="content" label="название задачи" />
+    <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!content"/>
+    </form>
+    
     <q-list 
     separator
     bordered
@@ -39,12 +43,13 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue"
 
-export default{
-  data() {
-    return {
-      tasks: [
+
+const content = ref() 
+
+const tasks = ref([
         {
         title: "hi",
         done: false
@@ -57,18 +62,23 @@ export default{
         title: "h2",
         done: false
         },
-      ]
-      
-    }
-  },
-  methods: {
-    deleteTask(index) {
-      this.tasks.splice(index, 1)
-    }
-  }
+      ])
 
-}
+    const deleteTask = (index) => {
+          tasks.value.splice(index, 1)
+    }
 
+    const addTusk = () => {
+      console.log(tasks.value)
+          tasks.value.push({
+        title: content.value,
+        done: false
+      })
+      content.value=""
+    }
+    
+
+  
 </script>
 
 <style lang="scss">
@@ -77,5 +87,12 @@ export default{
     text-decoration: line-through;
     color: rgb(53, 53, 53)
   }
+}
+.input-task{
+  width: 95%;
+}
+.image-button{
+  width: 56px;
+  height: 56px;
 }
 </style>
