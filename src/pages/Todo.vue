@@ -6,11 +6,13 @@
     <q-input standout="bg-orange-5 text-white" class="input-task" v-model="newTodoContent" label="название задачи" />
     <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!newTodoContent"/>
     </form>
+
     
     <q-list 
     separator
     bordered
     >
+    <transition-group name="list" mode="out-in">
       <q-item 
       @click="toggleDone(task.id)"
       clickable
@@ -19,6 +21,7 @@
       :key="task.id"
       v-ripple
       >
+      
         <q-item-section avatar>
           <q-checkbox
           class="no-pointer-events"
@@ -42,8 +45,9 @@
         outline round color="red" icon="delete" />
         </q-item-section>
       </q-item>
-
+    </transition-group> 
     </q-list>
+     
   </div>
   </q-page>
 </template>
@@ -95,7 +99,6 @@ onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
     const $q = useQuasar()
 
 // delete todo
-
 function deleteTask (task) {
   $q.dialog({
     content: 'Confirm',
@@ -125,6 +128,7 @@ const toggleDone = (id) => {
   done: !tasks.value[index].done
 });
 }
+
 </script>
 
 <style lang="scss">
@@ -148,5 +152,13 @@ const toggleDone = (id) => {
 }
 .main-todo{
   background: rgba(255, 0, 0, 0);
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
 }
 </style>
