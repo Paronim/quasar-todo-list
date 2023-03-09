@@ -17,7 +17,7 @@
         <div class="text-h3 my-font">My TodoList</div>
       <div class="text-subtitle">{{todayDate}}</div>
     </div>
-    <q-img class="header-image absolute-top" src="../assets/heder_for_site_0062.jpg"/>
+    <q-img class="header-image absolute-top" src="../assets/641.svg"/>
     </q-header>
 
     <q-drawer
@@ -73,7 +73,7 @@
       </q-drawer>
 
 
-    <q-page-container class="bg-orange-3">
+    <q-page-container class="bg-blue-3">
       
       <router-view v-slot="{ Component }">
         <transition appear @enter="enter" mode="out-in">
@@ -178,8 +178,6 @@ export default defineComponent({
     }
   }
 })
-
-
 </script>
 
 <style lang="scss">
@@ -187,8 +185,6 @@ export default defineComponent({
  .header-image{
   height: 100%;
   z-index: -1;
-  filter: grey;
-  opacity: 0.7;
  }
 
 .image{

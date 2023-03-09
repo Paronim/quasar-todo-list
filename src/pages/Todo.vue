@@ -3,7 +3,7 @@
     <div class="wrapper-content-todo">
     <h5>Todo</h5>
     <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
-    <q-input standout="bg-orange-5 text-white" class="input-task" v-model="newTodoContent" label="название задачи" />
+    <q-input standout="bg-blue-5 text-white" class="input-task" v-model="newTodoContent" label="название задачи" />
     <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!newTodoContent"/>
     </form>
 
@@ -26,7 +26,7 @@
           <q-checkbox
           class="no-pointer-events"
           v-model="task.done" 
-          val="orange" 
+          val="blue" 
           color="primary" 
           />
         </q-item-section>
@@ -115,7 +115,7 @@ function deleteTask (task) {
     deleteDoc(doc(tasksCollectionsRef, task.id));
     $q.notify({
           message: `Задача с заголовком \"${task.content}\" удалена`,
-          color: 'orange'
+          color: 'blue'
         })
   })
 }
