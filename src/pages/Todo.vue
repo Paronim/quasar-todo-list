@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-orange-3 column q-pa-lg">
+  <q-page class="column q-pa-lg main-todo">
     <div class="wrapper-content-todo">
     <h5>Todo</h5>
     <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
@@ -119,5 +119,8 @@ function deleteTask (index) {
   background: white;
   border-radius: 20px;
   padding: 25px;
+}
+.main-todo{
+  background: rgba(255, 0, 0, 0);
 }
 </style>

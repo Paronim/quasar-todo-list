@@ -1,5 +1,5 @@
 <template>
-    <q-page class="bg-orange-3 column q-pa-lg">
+    <q-page class="column q-pa-lg main-about">
       <div class="wrapper-content-about">
         <h5>About</h5>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt, ipsam. Velit sunt impedit perferendis ipsum repudiandae sint voluptate repellat repellendus illum. Perspiciatis possimus architecto tenetur.</p>
@@ -16,5 +16,8 @@
       background: white;
       border-radius: 20px;
       padding: 25px;
+    }
+    .main-about{
+    background: rgba(255, 0, 0, 0);
     }
   </style>

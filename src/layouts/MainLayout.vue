@@ -28,7 +28,7 @@
       >
         <q-scroll-area style="height: calc(100% - 172.5px); margin-top: 172.5px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item clickable v-ripple to="/" exact @click="componentAnimated">
+            <q-item clickable v-ripple to="/" exact>
               <q-item-section avatar>
                 <q-icon name="list" />
               </q-item-section>
@@ -38,7 +38,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple to="/help" exact @click="componentAnimated">
+            <q-item clickable v-ripple to="/help" exact>
               <q-item-section avatar>
                 <q-icon name="help" />
               </q-item-section>
@@ -48,7 +48,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple to="/about" exact @click="componentAnimated">
+            <q-item clickable v-ripple to="/about" exact>
               <q-item-section avatar>
                 <q-icon name="link" />
               </q-item-section>
@@ -73,18 +73,21 @@
       </q-drawer>
 
 
-    <q-page-container>
+    <q-page-container class="bg-orange-3">
+      
       <router-view v-slot="{ Component }">
-        <keep-alive>
+        <transition appear @enter="enter" mode="out-in">
+          <keep-alive>
           <component :is="Component"/>
-        </keep-alive>
+          </keep-alive>
+        </transition>
       </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { gsap } from 'gsap'
+import gsap from 'gsap'
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { date } from 'quasar'
@@ -149,9 +152,25 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      enter(el) {
+        gsap.fromTo(
+          el,
+          {
+            y: -100,
+            opacity: 0,
+          },
+          {
+            delay: 0.5,
+            duration: 1,
+            y: 0,
+            opacity: 1,
+          }
+        );
       }
     }
   },
+
   computed: {
     todayDate() {
       const timeStamp = Date.now()
