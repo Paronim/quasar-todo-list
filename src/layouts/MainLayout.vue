@@ -28,7 +28,7 @@
       >
         <q-scroll-area style="height: calc(100% - 172.5px); margin-top: 172.5px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item clickable v-ripple to="/" exact>
+            <q-item clickable v-ripple to="/" exact @click="componentAnimated">
               <q-item-section avatar>
                 <q-icon name="list" />
               </q-item-section>
@@ -38,7 +38,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple to="/help" exact>
+            <q-item clickable v-ripple to="/help" exact @click="componentAnimated">
               <q-item-section avatar>
                 <q-icon name="help" />
               </q-item-section>
@@ -48,7 +48,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple to="/about" exact>
+            <q-item clickable v-ripple to="/about" exact @click="componentAnimated">
               <q-item-section avatar>
                 <q-icon name="link" />
               </q-item-section>
@@ -76,7 +76,7 @@
     <q-page-container>
       <router-view v-slot="{ Component }">
         <keep-alive>
-          <component :is="Component" />
+          <component :is="Component"/>
         </keep-alive>
       </router-view>
     </q-page-container>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { gsap } from 'gsap'
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { date } from 'quasar'
@@ -148,7 +149,7 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      },  
+      }
     }
   },
   computed: {
@@ -158,19 +159,20 @@ export default defineComponent({
     }
   }
 })
+
+
 </script>
 
 <style lang="scss">
+
  .header-image{
   height: 100%;
   z-index: -1;
   filter: grey;
   opacity: 0.7;
  }
+
 .image{
   background-color: $primary;
 }
-// .my-font{
-//   font-family: 'font-customer';
-// }
 </style>
