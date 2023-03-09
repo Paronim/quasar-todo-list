@@ -17,7 +17,7 @@
         <div class="text-h3 my-font">My TodoList</div>
       <div class="text-subtitle">{{todayDate}}</div>
     </div>
-    <q-img class="header-image absolute-top" src="../assets/heder_for_site_0062.jpg"/>
+    <q-img class="header-image absolute-top" src="../assets/641.svg"/>
     </q-header>
 
     <q-drawer
@@ -73,17 +73,21 @@
       </q-drawer>
 
 
-    <q-page-container>
+    <q-page-container class="bg-blue-3">
+      
       <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
+        <transition appear @enter="enter" mode="out-in">
+          <keep-alive>
+          <component :is="Component"/>
+          </keep-alive>
+        </transition>
       </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
+import gsap from 'gsap'
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { date } from 'quasar'
@@ -148,9 +152,25 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      },  
+      },
+      enter(el) {
+        gsap.fromTo(
+          el,
+          {
+            y: -100,
+            opacity: 0,
+          },
+          {
+            delay: 0.5,
+            duration: 1,
+            y: 0,
+            opacity: 1,
+          }
+        );
+      }
     }
   },
+
   computed: {
     todayDate() {
       const timeStamp = Date.now()
@@ -161,16 +181,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+
  .header-image{
   height: 100%;
   z-index: -1;
-  filter: grey;
-  opacity: 0.7;
  }
+
 .image{
   background-color: $primary;
 }
-// .my-font{
-//   font-family: 'font-customer';
-// }
 </style>

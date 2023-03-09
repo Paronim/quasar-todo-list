@@ -98,7 +98,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Dialog', 'Notify']
     },
 
     // animations: 'all', // --- includes all animations
@@ -218,6 +218,8 @@ module.exports = configure(function (ctx) {
       
       chainWebpackPreload (/* chain */) {},
       
-    }
+    },
+    animations: 'all'
   }
+  
 });
