@@ -66,8 +66,8 @@
             <q-avatar size="80px" class="q-mb-sm">
               <img src="../assets/sobaka-v-kostjume-adidas-1-768x711.jpeg">
             </q-avatar>
-            <div class="text-weight-bold">Vlaaaaaaad</div>
-            <div>@rstoenescu</div>
+            <div class="text-weight-bold">Vlaaad</div>
+            <div>@email</div>
           </div>
         </q-img>
       </q-drawer>
@@ -83,6 +83,7 @@
         </transition>
       </router-view>
     </q-page-container>
+
   </q-layout>
 </template>
 
@@ -145,6 +146,7 @@ export default defineComponent({
   },
 
   setup () {
+
     const leftDrawerOpen = ref(false)
 
     return {
@@ -167,7 +169,7 @@ export default defineComponent({
             opacity: 1,
           }
         );
-      }
+      },
     }
   },
 
@@ -190,4 +192,5 @@ export default defineComponent({
 .image{
   background-color: $primary;
 }
+
 </style>
