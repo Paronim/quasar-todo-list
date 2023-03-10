@@ -3,15 +3,19 @@
     <div class="wrapper-content-todo">
     <h5>Todo</h5>
     <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
-    <q-input standout="bg-blue-5 text-white" class="input-task" v-model="newTodoContent" label="Название задачи" />
+    <q-input standout="bg-blue-5 text-white" class="input-task" v-model="newTodoContent" label="Task name" />
     <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!newTodoContent"/>
     </form>
     
-    <div class="no-task flex column items-center" v-if="!tasks.length">
+    <div class="no-task flex column items-center" v-if="noTask">
       <q-icon name="check" size="100px" color="primary"/>
       <div class="text-h4 text-weight-bold text-primary font-style">No Tasks!</div>
     </div>
-    
+
+    <div class="flex justify-center" v-if="noTaskForLoad">
+      <img src="../assets/load.gif">
+    </div>
+
     <q-list 
     separator
     bordered
@@ -68,7 +72,8 @@ const tasksCollectionsQuery = query(tasksCollectionsRef, orderBy("date", "desc")
 
 // todo
 const tasks = ref([]);
-
+const noTask = ref(false)
+const noTaskForLoad = ref(true)
 // get todo 
 onMounted( () => {
 onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
@@ -85,6 +90,13 @@ onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
     fbtasks.push(task)
     });
     tasks.value = fbtasks
+    if(tasks.value.length === 0){
+      noTask.value = true
+      noTaskForLoad.value = false
+    } else {
+      noTask.value = false
+      noTaskForLoad.value = false
+    }
     });
   })
 
@@ -92,12 +104,26 @@ onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
   const newTodoContent = ref("") 
 
   const addTusk = () => {
-    addDoc(tasksCollectionsRef, {
+    if(newTodoContent.value.trim() === ""){
+      $q.notify({
+          message: `Enter the name of the task`,
+          color: 'red'
+        })
+  } else 
+    if(tasks.value.some(el => el.content.toLowerCase().trim() === newTodoContent.value.toLowerCase().trim())){
+      $q.notify({
+          message: `The task with the title \"${newTodoContent.value}\" already exists`,
+          color: 'red'
+        })
+    } else
+     {
+      addDoc(tasksCollectionsRef, {
     content: newTodoContent.value,
     done: false,
-    date: Date.now()
-  });
+    date: Date.now() 
+    });
     newTodoContent.value = "";
+    }
   }
   
     const $q = useQuasar()
@@ -106,7 +132,7 @@ onSnapshot(tasksCollectionsQuery, (querySnapshot) => {
 function deleteTask (task) {
   $q.dialog({
     content: 'Confirm',
-    message: 'Вы действительно хотите удалить?',
+    message: 'Do you really want to delete?',
     ok: {
       push: true
     },
@@ -118,7 +144,7 @@ function deleteTask (task) {
   }).onOk(() => {
     deleteDoc(doc(tasksCollectionsRef, task.id));
     $q.notify({
-          message: `Задача с заголовком \"${task.content}\" удалена`,
+          message: `The task with the header \"${task.content}\" has been deleted`,
           color: 'blue'
         })
   })
