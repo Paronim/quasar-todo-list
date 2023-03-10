@@ -3,16 +3,21 @@
     <div class="wrapper-content-todo">
     <h5>Todo</h5>
     <form @submit.prevent="addTusk()" class="flex q-mb-lg no-wrap items-center"> 
-    <q-input standout="bg-blue-5 text-white" class="input-task" v-model="newTodoContent" label="название задачи" />
+    <q-input standout="bg-blue-5 text-white" class="input-task" v-model="newTodoContent" label="Название задачи" />
     <q-btn type="submit" class="q-ma-sm image-button" round color="secondary" icon="navigation" :disabled="!newTodoContent"/>
     </form>
-
+    
+    <div class="no-task flex column items-center" v-if="!tasks.length">
+      <q-icon name="check" size="100px" color="primary"/>
+      <div class="text-h4 text-weight-bold text-primary font-style">No Tasks!</div>
+    </div>
     
     <q-list 
     separator
     bordered
     >
-    <transition-group name="list" mode="out-in">
+
+    <transition-group name="list">
       <q-item 
       @click="toggleDone(task.id)"
       clickable
@@ -47,8 +52,7 @@
       </q-item>
     </transition-group> 
     </q-list>
-     
-  </div>
+    </div>
   </q-page>
 </template>
 
@@ -139,11 +143,11 @@ const toggleDone = (id) => {
   }
 }
 .input-task{
-  width: 95%;
+  width: 100%;
 }
 .image-button{
-  width: 56px;
-  height: 56px;
+  width: auto;
+  height: auto;
 }
 .wrapper-content-todo{
   background: white;
@@ -160,5 +164,9 @@ const toggleDone = (id) => {
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
+}
+.no-task{
+  opacity: 0.2;
+
 }
 </style>
